@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>проснулся во мне поэт</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #1b1b1b, #3a3a3a);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Georgia", serif;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .envelope {
+    width: 180px;
+    height: 120px;
+    background: #cfa36b;
+    position: relative;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 0 20px rgba(255, 170, 80, 0.3);
+  }
+
+  .envelope:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 180, 100, 0.5);
+  }
+
+  .envelope:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 90px solid transparent;
+    border-right: 90px solid transparent;
+    border-bottom: 60px solid #dcb47d;
+  }
+
+  .text-below {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .poem {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 500px;
+    text-align: center;
+    line-height: 1.6;
+    font-size: 1.2rem;
+    color: #ffedcf;
+    background: rgba(255, 193, 112, 0.1);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(255, 160, 80, 0.3);
+  }
+
+  .poem-line {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+  }
+
+  .poem-line.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Эффект тепла */
+  .warm-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,150,80,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 2s ease;
+    pointer-events: none;
+  }
+
+  .warm-glow.active {
+    opacity: 1;
+    animation: pulse 3s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.4; }
+    to { opacity: 0.7; }
+  }
+</style>
+</head>
+<body>
+
+<div class="envelope" id="envelope"></div>
+<div class="text-below">нажми на конверт</div>
+
+<div class="warm-glow" id="warm"></div>
+
+<div class="poem" id="poem">
+  <div class="poem-line">Я бы хотел быть рядом — просто идти,</div>
+  <div class="poem-line">Слушать, как ветер качает ветви.</div>
+  <div class="poem-line">Но сад пока только в груди,</div>
+  <div class="poem-line">И путь до него — в ответе.</div>
+  <br>
+  <div class="poem-line">Когда-нибудь, если судьба не устанет,</div>
+  <div class="poem-line">Мы встретимся там, где мечта жива.</div>
+  <div class="poem-line">Ты скажешь: “Поздно.” А я — “Не поздно.”</div>
+  <div class="poem-line">И начнётся новая глава.</div>
+</div>
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const poem = document.getElementById('poem');
+  const warm = document.getElementById('warm');
+  const textBelow = document.querySelector('.text-below');
+  const lines = document.querySelectorAll('.poem-line');
+
+  envelope.addEventListener('click', () => {
+    warm.classList.add('active');
+    envelope.style.display = 'none';
+    textBelow.style.display = 'none';
+
+    setTimeout(() => {
+      poem.style.display = 'flex';
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add('show');
+        }, i * 2000); // Каждая строка появляется через 2 секунды
+      });
+    }, 1000);
+  });
+</script>
+
+</body>
+</html>
