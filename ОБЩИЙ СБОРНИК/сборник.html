@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>СБОРНИК</title>
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  min-height:100svh; /* стабильнее на мобилках */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Georgia","Times New Roman",serif;
+
+  background:
+    radial-gradient(circle at 40% 25%, rgba(255,210,140,.18), transparent 45%),
+    radial-gradient(circle at 60% 70%, rgba(255,180,90,.10), transparent 55%),
+    radial-gradient(circle at 50% 50%, #2a1f14 0%, #0f0b08 60%, #050403 100%);
+  color:#f6e9cf;
+}
+
+.wrap{
+  width:min(1200px, 96vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:18px 0;
+}
+
+.topbar{
+  width:min(980px, 96vw);
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  opacity:.95;
+  padding:0 6px;
+  flex-wrap:wrap;          /* mobile fix */
+  gap:8px 12px;            /* mobile fix */
+}
+.topbar .hint{
+  font-size:13px;
+  opacity:.85;
+  line-height:1.35;        /* mobile fix */
+}
+
+/* ---------- Обложка ---------- */
+.cover-wrap{
+  width:min(760px, 92vw);
+  height:min(820px, 82svh);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cover{
+  width:100%;
+  height:100%;
+  border-radius:18px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,.08), transparent 55%),
+    radial-gradient(circle at 75% 75%, rgba(0,0,0,.25), transparent 55%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 2px, rgba(0,0,0,.03) 2px 6px),
+    linear-gradient(135deg, #3b2417, #24150d);
+
+  box-shadow:0 34px 90px rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.08);
+}
+.cover::before{
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:92px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.68), rgba(0,0,0,.26)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 6px, rgba(0,0,0,.06) 6px 12px);
+}
+.cover::after{
+  content:"";
+  position:absolute;
+  inset:34px;
+  border-radius:14px;
+  border:1px solid rgba(255,230,180,.22);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+}
+.cover-title{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:52px 48px 52px 120px;
+  gap:12px;
+}
+.cover-title h1{
+  margin:0;
+  font-size:clamp(34px, 4vw, 52px);
+  letter-spacing:1px;
+  text-shadow:0 2px 0 rgba(0,0,0,.35);
+}
+.cover-title .author{ font-size:18px; opacity:.92; }
+.cover-title .tap{ margin-top:18px; font-size:13px; opacity:.75; }
+
+/* ---------- Книга ---------- */
+.book-area{
+  display:none;
+  width:min(980px, 96vw);
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:14px;
+}
+
+.book{
+  width:min(860px, 96vw);
+  height:min(820px, 78svh);
+  position:relative;
+  perspective: 1400px;
+}
+.book::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+  box-shadow:0 30px 80px rgba(0,0,0,.7);
+}
+
+/* СТРАНИЦЫ */
+.page{
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+  overflow:auto; /* mobile fix: длинный текст не режется */
+  -webkit-overflow-scrolling: touch;
+
+  background:
+    radial-gradient(circle at 20% 30%, rgba(120,80,40,.10), transparent 45%),
+    radial-gradient(circle at 70% 70%, rgba(90,60,30,.08), transparent 50%),
+    linear-gradient(#f3e6c8, #ecd9b2);
+
+  border:1px solid rgba(0,0,0,.08);
+
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+
+  display:flex;
+  flex-direction:column;
+  padding: clamp(18px, 4vw, 62px) clamp(14px, 4vw, 78px) clamp(18px, 4vw, 58px);
+  color:#2b1e12;
+}
+
+/* виньетка по краям */
+.page::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  box-shadow: inset 0 0 60px rgba(60,40,15,.22);
+  pointer-events:none;
+}
+
+/* заголовок/текст */
+.page h2{
+  margin:0 0 18px;
+  text-align:center;
+  letter-spacing:.5px;
+  font-size:clamp(18px, 5vw, 22px);
+  position:relative;
+  z-index:2;
+}
+
+.page h3{
+  margin:0 0 18px;
+  text-align:center;
+  letter-spacing:.5px;
+  font-size:clamp(17px, 4.6vw, 20px);
+  position:relative;
+  z-index:2;
+}
+
+.page p{
+  margin:0;
+  font-size:clamp(14px, 3.8vw, 20px);
+  line-height:1.65;
+  position:relative;
+  z-index:2;
+}
+
+.pnum{
+  position:absolute;
+  bottom:12px;
+  right:14px;
+  font-size:14px;
+  opacity:.65;
+  z-index:2;
+}
+
+.small{
+  font-size:14px;
+  opacity:.75;
+  color: rgba(43,30,18,.78);
+  white-space:pre-line;
+}
+
+/* ПЕРВАЯ СТРАНИЦА ПОСЛЕ ОБЛОЖКИ — БЕЛАЯ */
+.page.white{
+  background: linear-gradient(#ffffff, #fbfbfb);
+}
+.page.white::after{
+  box-shadow: inset 0 0 40px rgba(0,0,0,.06);
+}
+
+/* ---------- Анимация (замедлили) ---------- */
+.page.turn-next{
+  animation: turnNext 1.15s ease forwards;
+}
+.page.turn-prev{
+  transform: rotateY(-180deg);
+  animation: turnPrev 1.15s ease forwards;
+}
+
+@keyframes turnNext{
+  0%   { transform: rotateY(0deg);   box-shadow: none; }
+  50%  { box-shadow: -18px 0 30px rgba(0,0,0,.25); }
+  100% { transform: rotateY(-180deg); box-shadow: none; }
+}
+@keyframes turnPrev{
+  0%   { transform: rotateY(-180deg); box-shadow: none; }
+  50%  { box-shadow: -18px 0 30px rgba(0,0,0,.25); }
+  100% { transform: rotateY(0deg); box-shadow: none; }
+}
+
+/* ---------- Кнопки ---------- */
+.nav{
+  width:min(860px, 96vw);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;            /* mobile fix */
+}
+.nav-left, .nav-right{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  flex:1 1 240px;            /* mobile fix */
+}
+
+button{
+  background: rgba(243,230,200,.15);
+  color:#f6e9cf;
+  border:1px solid rgba(255,255,255,.18);
+  padding:12px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  user-select:none;
+  backdrop-filter: blur(4px);
+  width:100%;
+  max-width:240px;
+  touch-action: manipulation;
+  font-size:16px;            /* iOS zoom fix */
+}
+button:hover{ background: rgba(243,230,200,.22); }
+button:disabled{ opacity:.45; cursor:not-allowed; }
+
+.status{
+  color:#f6e9cf;
+  font-size:13px;
+  opacity:.9;
+  text-align:center;
+  width:100%;
+  order:3;                   /* mobile fix */
+  min-width:0;
+}
+
+/* mobile tweaks for cover */
+@media (max-width: 520px){
+  .cover::before{ width:64px; }
+  .cover-title{ padding:44px 18px 44px 78px; }
+  .cover-title .author{ font-size:15px; }
+  .cover-title .tap{ font-size:12px; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="flipSound" src="flip.mp3" preload="auto"></audio>
+
+<div class="wrap">
+  <div class="topbar">
+    <div id="uiTitle">Закрытая книга</div>
+    <div class="hint">Открыть: тап по обложке · Листать: ← → / свайп · Закрыть: ESC</div>
+  </div>
+
+  <div class="cover-wrap" id="coverWrap">
+    <div class="cover" id="cover">
+      <div class="cover-title">
+        <h1 id="bookName">«Название ещё не придумал»</h1>
+        <div class="author" id="bookAuthor">Сборник</div>
+        <div class="tap">Нажми, чтобы открыть книжку</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-area" id="bookArea">
+
+    <div class="book" id="book">
+
+      <!-- 1) БЕЛАЯ СТРАНИЦА ПОСЛЕ ОБЛОЖКИ (форзац) -->
+      <div class="page white" data-type="front-matter">
+        <h2></h2>
+        <p class="small"></p>
+      </div>
+
+      <!-- 2) О СБОРНИКЕ -->
+      <div class="page" data-type="about">
+        <h2 style="font-family:'Times New Roman', Times, serif;">О сборнике</h2>
+        <p style="text-align:justify; font-family:'Times New Roman', Times, serif; font-size:18px;">
+          «Этот сборник — всего лишь небольшая часть меня.
+          Не биография и не попытка всё рассказать — только то, что однажды попросилось на бумагу.
+          Здесь нет полной правды о моей жизни, есть лишь её отголоски: сны, воспоминания, несказанные слова и люди, которые остались внутри.
+          Я не знаю, кто прочтёт эти страницы, но знаю одно — в них живёт то, что я не смог удержать в себе.»
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- НАЧАЛО -->
+      <div class="page" data-type="poem" data-title="НАЧАЛО">
+        <h2>НАЧАЛО</h2>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:18px;">
+          «Всё началось с одного стихотворения, посвящённого мне, — с него и родилась эта история.
+          Само стихотворение приведено на следующей странице»
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 1) начало (стих) -->
+      <div class="page" data-type="poem" data-title="НАЧАЛО (стихотворение)">
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Я хочу чтобы ты меня обнял<br>
+          На заре. В нашей теплой постели<br>
+          Чтобы ты обнимал меня ночью<br>
+          Когда за окном холода и метели<br><br>
+
+          Я хочу объятия утром<br>
+          Я хочу объятья покрепче<br>
+          Чтобы в них укрыться от грома<br>
+          Чтобы жить становилось легче<br><br>
+
+          Ты меня называешь малышкой<br>
+          Я тебя называю любимый<br>
+          Мне не нужно принцев из сказок<br>
+          С ними не станешь настолько счастливой<br><br>
+
+          Я давно не писала стихов<br>
+          Да я в принципе даже и не поэт<br>
+          Только вот захотелось сказать<br>
+          Как внутри меня зажигаешь ты свет♥️
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 2) «Я бы хотел (Проснулся во мне поэт)» -->
+      <div class="page" data-type="poem" data-title="«Я бы хотел (Проснулся во мне поэт)»">
+        <h3>«Я бы хотел (Проснулся во мне поэт)»</h3>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Я бы хотел быть рядом — просто идти,<br>
+          Слушать, как ветер качает ветви.<br>
+          Но сад пока только в груди,<br>
+          И путь до него — в ответе.<br><br>
+
+          Когда-нибудь, если судьба не устанет,<br>
+          Мы встретимся там, где мечта жива.<br>
+          Ты скажешь: “Поздно.” А я — “Не поздно.”<br>
+          И начнётся новая глава.
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 3) «Я научусь» -->
+      <div class="page" data-type="poem" data-title="«Я научусь»">
+        <h2>«Я научусь»</h2>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Я научусь быть сильным — не закрытым,<br>
+          А тем, кто даёт спокойствие рядом.<br>
+          Научусь любить без лишних слов,<br>
+          А просто — делом, взглядом, правдой.<br><br>
+
+          Научусь молчать, когда вокруг шум,<br>
+          И говорить, когда нужно тепло.<br>
+          Не терять себя ради других,<br>
+          А быть тем, с кем легко и светло.<br><br>
+
+          Пусть время идёт, как идёт,<br>
+          И путь мой не будет простым.<br>
+          Но в доме, где живёт добро,<br>
+          Она однажды станет моим светом
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 4) «Е» -->
+      <div class="page" data-type="poem" data-title="«Е»">
+        <h2>«Е»</h2>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Она любила меня, но сейчас молчит,<br>
+          Говорит, что чувств нет, но я всё ещё чувствую.<br>
+          Я выбираю разум и свободу своей жизни,<br>
+          Считал её настоящей — и это остаётся внутри.<br><br>
+
+          Её сердце сейчас закрыто, она не готова,<br>
+          Боится, что я ограничу себя и свои мечты.<br>
+          Я буду жить без неё, но не без любви,<br>
+          Мне важна она, но важна и моя жизнь,<br>
+          Счастье моё и её счастье — пусть найдёт день.<br><br>
+
+          Я не буду жить в надежде, что она вернётся,<br>
+          Я живу, иду, люблю и остаюсь собой.<br>
+          А если это судьба — она сведёт нас вновь,<br>
+          И если нас судьба не столкнёт — мы встретимся вновь,<br>
+          В своём темпе, когда оба будем готовы.
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 5) «O'mirim mazmuni» (Смысл моей жизни) -->
+      <div class="page" data-type="poem" data-title="«O'mirim mazmuni» (Смысл моей жизни)">
+        <h3>«O'mirim mazmuni» (Смысл моей жизни)</h3>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          O'mirim mazmuni o'zin'sen' janim, <br>
+          Bir shiyrin ku'lkin'e bereyin barim, <br>
+          Sendey hu'r perini basqa tappadim, <br>
+          Sennen o'zgesine mende baqpadim. <br><br>
+
+          ----------------------------------------------<br><br>
+
+          Смысл моей жизни в тебе, моя дорогая.<br>
+          Позволь мне отдать всё ради твоего сладкого смеха.<br>
+          Я не нашёл другую фею, подобную тебе.<br>
+          Я никому, кроме тебя, не смотрел.<br>
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 6) Обещал -->
+      <div class="page" data-type="poem" data-title="«Обещал»">
+        <h2>«Обещал»</h2>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Я обещал забыть — и не смог. <br>
+          Я клялся уйти — и остался внутри. <br>
+          Память сильнее моих дорог, <br>
+          Сердце упрямее слов и вины.<br><br>
+
+          Я не сдержал — и в этом весь я:<br>
+          Хотел отпустить, но умею — любя
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 7) «Сон» -->
+      <div class="page" data-type="poem" data-title="«Сон»">
+        <h2>«Сон»</h2>
+        <p style="text-align:center; font-family:'Times New Roman', Times, serif; font-size:15px;">
+          Я говорил себе: прошло, <br>
+          Сотрётся имя, стихнет боль. <br>
+          Но ты во сне вошла легко — <br>
+          И снова стала мной. <br><br>
+
+          Мы были в том далёком саду, <br>
+          Где так и не смогли быть вдвоём. <br>
+          Там ветер хранил нашу мечту, <br>
+          Там каждый миг был о живом. <br><br>
+
+          Я не держу. Я не зову. <br>
+          Но в тишине ловлю одно: <br>
+          Не отпустил. <br>
+          И не дано.
+        </p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 8) СОДЕРЖАНИЕ -->
+      <div class="page" data-type="toc">
+        <h2>Содержание</h2>
+        <p id="tocList" class="small">Загрузка...</p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+      <!-- 9) КОНЕЦ -->
+      <div class="page" data-type="end">
+        <h2></h2>
+        <p class="small" style="text-align:center; font-size:25px;">Конец.</p>
+        <div class="pnum" data-pnum></div>
+      </div>
+
+    </div>
+
+    <div class="nav">
+      <div class="nav-left">
+        <button id="prevBtn" type="button">← Назад</button>
+        <button id="closeBtn" type="button">Закрыть книгу</button>
+      </div>
+
+      <div class="status" id="status">Страница 1</div>
+
+      <div class="nav-right">
+        <button id="nextBtn" type="button">Вперёд →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const coverWrap = document.getElementById("coverWrap");
+const cover = document.getElementById("cover");
+const bookArea = document.getElementById("bookArea");
+const uiTitle = document.getElementById("uiTitle");
+
+const flipSound = document.getElementById("flipSound");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const closeBtn = document.getElementById("closeBtn");
+const statusEl = document.getElementById("status");
+
+const pages = Array.from(document.querySelectorAll(".page"));
+
+let index = 0;
+let isTurning = false;
+
+/* =======================
+   ПЕРЕЗАГРУЗКА: ВОЗВРАТ НА ТУ ЖЕ СТРАНИЦУ
+   ======================= */
+const saved = localStorage.getItem("bookPageIndex");
+const hasSavedIndex = (saved !== null && saved !== "" && !Number.isNaN(parseInt(saved, 10)));
+if (hasSavedIndex) index = parseInt(saved, 10);
+
+function playFlip(){
+  if (!flipSound) return;
+  flipSound.pause();
+  flipSound.currentTime = 0;
+  flipSound.volume = 0.6;
+  flipSound.play().catch(()=>{});
+}
+
+function applyPageNumbers(){
+  pages.forEach((pg, i) => {
+    const el = pg.querySelector("[data-pnum]");
+    if (el) el.textContent = String(i + 1);
+  });
+}
+
+function buildTOC(){
+  const tocEl = document.getElementById("tocList");
+  if (!tocEl) return;
+
+  const poemPages = pages
+    .map((pg, i) => ({ pg, i }))
+    .filter(x => x.pg.dataset.type === "poem" && x.pg.dataset.title);
+
+  tocEl.textContent = poemPages.length
+    ? poemPages.map(x => `• ${x.pg.dataset.title} — стр. ${x.i + 1}`).join("\n")
+    : "Пока нет стихов.";
+}
+
+function stackPages(){
+  const total = pages.length;
+  pages.forEach((pg, i) => {
+    pg.style.zIndex = String(total - i);
+    pg.style.display = "block";
+    pg.classList.remove("turn-next","turn-prev");
+    if (i < index) pg.style.transform = "rotateY(-180deg)";
+    else pg.style.transform = "rotateY(0deg)";
+  });
+}
+
+function updateUI(){
+  statusEl.textContent = `Страница ${index + 1} / ${pages.length}`;
+  prevBtn.disabled = (index === 0) || isTurning;
+  nextBtn.disabled = (index === pages.length - 1) || isTurning;
+  closeBtn.disabled = isTurning;
+  localStorage.setItem("bookPageIndex", String(index));
+}
+
+function next(){
+  if (isTurning || index >= pages.length - 1) return;
+
+  isTurning = true; updateUI();
+
+  const current = pages[index];
+  current.classList.add("turn-next");
+  playFlip();
+
+  current.addEventListener("animationend", function handler(){
+    current.removeEventListener("animationend", handler);
+    current.classList.remove("turn-next");
+    current.style.transform = "rotateY(-180deg)";
+    index++;
+    isTurning = false;
+    stackPages();
+    updateUI();
+  });
+}
+
+function prev(){
+  if (isTurning || index <= 0) return;
+
+  isTurning = true; updateUI();
+
+  const prevPage = pages[index - 1];
+  prevPage.classList.add("turn-prev");
+  playFlip();
+
+  prevPage.addEventListener("animationend", function handler(){
+    prevPage.removeEventListener("animationend", handler);
+    prevPage.classList.remove("turn-prev");
+    prevPage.style.transform = "rotateY(0deg)";
+    index--;
+    isTurning = false;
+    stackPages();
+    updateUI();
+  });
+}
+
+function openBook(){
+  coverWrap.style.display = "none";
+  bookArea.style.display = "flex";
+  uiTitle.textContent = "Книга открыта";
+
+  applyPageNumbers();
+  buildTOC();
+  stackPages();
+  updateUI();
+}
+
+function closeBook(){
+  if (isTurning) return;
+  bookArea.style.display = "none";
+  coverWrap.style.display = "flex";
+  uiTitle.textContent = "Закрытая книга";
+}
+
+cover.addEventListener("click", openBook);
+nextBtn.addEventListener("click", next);
+prevBtn.addEventListener("click", prev);
+closeBtn.addEventListener("click", closeBook);
+
+document.addEventListener("keydown", (e) => {
+  if (bookArea.style.display !== "flex") return;
+  if (e.key === "ArrowRight") next();
+  if (e.key === "ArrowLeft") prev();
+  if (e.key === "Escape") closeBook();
+});
+
+/* =======================
+   MOBILE: SWIPE + TAP ZONES
+   ======================= */
+const bookEl = document.getElementById("book");
+
+let touchX = 0;
+let touchY = 0;
+
+function isBookOpen(){
+  return bookArea.style.display === "flex";
+}
+
+bookEl.addEventListener("touchstart", (e) => {
+  if (!isBookOpen()) return;
+  const t = e.touches[0];
+  touchX = t.clientX;
+  touchY = t.clientY;
+}, {passive:true});
+
+bookEl.addEventListener("touchend", (e) => {
+  if (!isBookOpen()) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchX;
+  const dy = t.clientY - touchY;
+
+  // если вертикальная прокрутка — не мешаем
+  if (Math.abs(dy) > Math.abs(dx)) return;
+
+  if (dx < -40) next();   // свайп влево -> вперед
+  if (dx > 40) prev();    // свайп вправо -> назад
+}, {passive:true});
+
+bookEl.addEventListener("click", (e) => {
+  if (!isBookOpen()) return;
+  if (e.target.closest("button")) return;
+
+  const rect = bookEl.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const ratio = x / rect.width;
+
+  if (ratio > 0.68) next();
+  else if (ratio < 0.32) prev();
+});
+
+/* =======================
+   АВТО-ОТКРЫТИЕ КНИГИ ПОСЛЕ ОБНОВЛЕНИЯ
+   ======================= */
+index = 0;
+localStorage.removeItem("bookPageIndex");
+</script>
+
+</body>
+</html>
