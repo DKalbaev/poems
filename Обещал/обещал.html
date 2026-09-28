@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Обещал</title>
+
+<style>
+:root{
+  --paper: rgba(255, 252, 245, .72);
+  --ink: #2c241e;
+  --muted: rgba(44, 36, 30, .72);
+  --shadow: 0 22px 60px rgba(20, 10, 5, .18);
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  background:
+    radial-gradient(900px 700px at 15% 20%, rgba(255, 235, 200, .85), transparent 60%),
+    radial-gradient(800px 600px at 85% 35%, rgba(255, 205, 150, .55), transparent 60%),
+    radial-gradient(700px 600px at 55% 90%, rgba(255, 250, 210, .75), transparent 55%),
+    linear-gradient(135deg, #ffe6b7 0%, #ffd0a8 35%, #f9b7c9 75%, #f6e1ff 100%);
+  background-attachment: fixed;
+}
+
+.wrap{
+  width: min(860px, 92vw);
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.card{
+  background: var(--paper);
+  border-radius: 24px;
+  padding: clamp(22px, 3.5vw, 38px);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== АНИМАЦИЯ СТРОК ===== */
+
+.poem{
+  margin: 0;
+  line-height: 1.75;
+  font-size: clamp(18px, 2.6vw, 24px);
+  font-weight: 600;
+}
+
+.line{
+  display: block;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity .9s ease,
+    transform .9s ease;
+}
+
+.line.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* кнопка перезапуска */
+.restart{
+  margin-top: 16px;
+  background: rgba(0,0,0,.06);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+<main class="wrap">
+<section class="card">
+
+<h1>Обещал</h1>
+
+<p class="poem" id="poem">
+  <span class="line">Я обещал забыть — и не смог.</span>
+  <span class="line">Я клялся уйти — и остался внутри.</span>
+  <span class="line">Память сильнее моих дорог,</span>
+  <span class="line">Сердце упрямее слов и вины.</span>
+
+  <span class="line">Я не сдержал — и в этом весь я:</span>
+  <span class="line">Хотел отпустить, но умею — любя</span>
+</p>
+
+
+
+</section>
+</main>
+
+<script>
+function start(){
+  const lines = document.querySelectorAll('.line');
+
+  lines.forEach(l => l.classList.remove('show'));
+
+  lines.forEach((line, i) => {
+    setTimeout(() => {
+      line.classList.add('show');
+    }, 1400 * i);        // <-- скорость появления строк
+  });
+}
+
+start();
+</script>
+
+</body>
+</html> 
