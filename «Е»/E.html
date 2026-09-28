@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Теплый стих</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            color: #5B2C00;
+            background: linear-gradient(to bottom, #FFE5B4, #FFB347);
+            animation: warmGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes warmGlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        button {
+            font-size: 2rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #FF7F50;
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+            transform: scale(1.05);
+        }
+
+        .line {
+            opacity: 0;
+            margin: 10px 0;
+            font-size: 1.5rem;
+            transform: translateY(-20px);
+            transition: opacity 1s, transform 1s, text-shadow 1s;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+            text-shadow: 0 0 10px rgba(255,140,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <button id="showPoem">📝</button>
+    <div id="poem"></div>
+
+    <script>
+        const lines = [
+            "Она любила меня, но сейчас молчит,",
+            "Говорит, что чувств нет, но я всё ещё чувствую.",
+            "Я выбираю разум и свободу своей жизни,",
+            "Считал её настоящей — и это остаётся внутри.",
+            "",
+            "Её сердце сейчас закрыто, она не готова,",
+            "Боится, что я ограничу себя и свои мечты.",
+            "Я буду жить без неё, но не без любви,",
+            "Мне важна она, но важна и моя жизнь,",
+            "Счастье моё и её счастье — пусть найдёт день.",
+            "",
+            "Я не буду жить в надежде, что она вернётся,",
+            "Я живу, иду, люблю и остаюсь собой.",
+            "А если это судьба — она сведёт нас вновь,",
+            "И если нас судьба не столкнёт — мы встретимся вновь,",
+            "В своём темпе, когда оба будем готовы."
+        ];
+
+        const poemContainer = document.getElementById('poem');
+        const button = document.getElementById('showPoem');
+
+        button.addEventListener('click', () => {
+            button.style.display = 'none';
+            lines.forEach((line, index) => {
+                const p = document.createElement('p');
+                p.className = 'line';
+                p.textContent = line;
+                poemContainer.appendChild(p);
+                setTimeout(() => {
+                    p.classList.add('visible');
+                }, index * 2000);
+            });
+        });
+    </script>
+</body>
+</html>
